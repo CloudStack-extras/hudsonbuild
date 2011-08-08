@@ -108,12 +108,12 @@ elif [ "$installtype" == "d" -o "$installtype" == "D" ] ; then
 
     echo "Installing the MySQL server..." >&2
     if doinstall mysql-server ; then
-        if /sbin/service mysqld status > /dev/null 2>&1 ; then
+        if /sbin/service mysql status > /dev/null 2>&1 ; then
             echo "Restarting the MySQL server..." >&2
-            /sbin/service mysqld restart # mysqld running already, we restart it
+            /sbin/service mysql restart # mysqld running already, we restart it
         else
             echo "Starting the MySQL server..." >&2
-            /sbin/service mysqld start   # we start mysqld for the first time
+            /sbin/service mysql start   # we start mysqld for the first time
         fi
     else
         true
