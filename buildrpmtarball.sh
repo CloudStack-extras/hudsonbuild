@@ -23,7 +23,7 @@ rsync -a "$rpmDir"/oss "$destdir"/
 if [ "$oss" != "True" ]; then
 	rsync -a "$rpmDir"/premium "$destdir"/
 fi
-rsync -a "$DEPS_DIR" "$destdir"/deps/
+rsync -a "$DEPS_DIR" "$destdir"/
 createrepo -q -d "$destdir"
 chmod +x install.sh
 cp install.sh "$destdir"/
