@@ -76,6 +76,7 @@ def prepareEnv(distro):
     environ['BUILD_TARBALL'] = os.environ['BUILD_TARBALL']
     environ['BUILD_USER'] = os.environ['BUILD_USER']
     environ['BUILD_NUMBER'] = os.environ['BUILD_NUMBER']
+    environ['PUSH_TO_S3'] = os.environ['PUSH_TO_S3']
     environ['GIT_SOURCE_DIR'] = 'source'
     environ['USE_WAF'] = str(useWaf())
     environ['REMOTE_USER']= REMOTE_USER

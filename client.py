@@ -102,6 +102,19 @@ def buildSource():
         
         
 def buildTarball():
+    def getS3repo(distro):
+        s3repo = os.environ['PUSH_TO_S3']
+        if s3repo == "none":
+            printd("No need to push to S3")
+            return ""
+        
+        if distro != "rhel5" and distro != "rhel6":
+            printd("Only rhel5 and rhel6 build support this feature")
+            return ""
+        
+        return s3repo
+         
+ 
     version = os.environ['PACKAGE_VERSION']
     distro = os.environ['DO_DISTRO_PACKAGES']
     if os.environ['LABEL_AS_PRERELEASE'] == 'true':
@@ -125,12 +138,12 @@ def buildTarball():
             print("No need to build tarball")    
     else:
         if os.environ["BUILD_TARBALL"] == "oss&premium":
-            bash(["sh", abspath("buildrpmtarball.sh"), "True", distro, version, "CloudStack-oss"])
-            bash(["sh", abspath("buildrpmtarball.sh"), "False", distro, version, "CloudStack"])
+            bash(["sh", abspath("buildrpmtarball.sh"), "True", distro, version, "CloudStack-oss", getS3repo(distro)])
+            bash(["sh", abspath("buildrpmtarball.sh"), "False", distro, version, "CloudStack", getS3repo(distro)])
         elif os.environ["BUILD_TARBALL"] == "oss":
-            bash(["sh", abspath("buildrpmtarball.sh"), "True", distro, version, "CloudStack-oss"])
+            bash(["sh", abspath("buildrpmtarball.sh"), "True", distro, version, "CloudStack-oss", getS3repo(distro)])
         elif os.environ["BUILD_TARBALL"] == "premium":
-            bash(["sh", abspath("buildrpmtarball.sh"), "False", distro, version, "CloudStack"])
+            bash(["sh", abspath("buildrpmtarball.sh"), "False", distro, version, "CloudStack", getS3repo(distro)])
         else:
             print("No need to build tarball")
 
@@ -146,6 +159,7 @@ def postPackages():
         postDebs()
     else:
         postRpms()
+
 
         
 def main():

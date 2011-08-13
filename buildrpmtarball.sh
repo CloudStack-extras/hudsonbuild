@@ -11,6 +11,8 @@ shift
 version="$1"
 shift
 tarballname="$1"
+shift
+s3repo="$1"
 
 pkgname=$tarballname-$version-$distro
 tmpdir=`mktemp -d`
@@ -37,5 +39,8 @@ tgtfldr="$YUMREPO":"$YUMREPO_RELEASE_DIR"/"$SUB_DIR"
 mntpoint="/media"
 mount "$tgtfldr" "$mntpoint" -o nolock
 mkdir -p "$mntpoint"/"$PUSH_TO_REPO"
+if [ x"$s3repo" != x"" ]; then
+	s3cmd put --acl-public "$tarname" "$s3repo"
+fi
 mv "$tarname" "$mntpoint"/"$PUSH_TO_REPO"/
 umount "$mntpoint"
