@@ -38,6 +38,7 @@ mntpoint="/media"
 mount "$tgtfldr" "$mntpoint" -o nolock
 mkdir -p "$mntpoint"/"$PUSH_TO_REPO"
 mv "$tarname" "$mntpoint"/"$PUSH_TO_REPO"/
+echo "Tarball URL:http://aptrepo.lab.vmops.com/releases/$SUB_DIR/$PUSH_TO_REPO/$tarname"
 umount "$mntpoint"
 
 

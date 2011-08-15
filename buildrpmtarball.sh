@@ -43,4 +43,5 @@ if [ x"$s3repo" != x"" ]; then
 	s3cmd put --acl-public "$tarname" "$s3repo"
 fi
 mv "$tarname" "$mntpoint"/"$PUSH_TO_REPO"/
+echo "Tarball URL:http://yumrepo.lab.vmops.com/releases/$SUB_DIR/$PUSH_TO_REPO/$tarname"
 umount "$mntpoint"

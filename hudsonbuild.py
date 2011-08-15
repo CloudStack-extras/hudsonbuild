@@ -157,7 +157,75 @@ def doBuild(distro):
     host = buildMachines[distro]['host']
     prepareBuildScrpits(host)
     startBuildThread(distro, host)
+
+def getUser():
+    user = os.environ['BUILD_USER']
+    user = user.replace("by user", "")
+    return user.strip()
     
+def sendMail():
+    def getMailAddress():
+        addressBook = join(os.getcwd(), "mail_addresses")
+        fd = open(addressBook, "r")
+        lines = fd.readlines()
+        fd.close()
+        
+        for line in lines:
+            items = line.split(":")
+            if len(items) != 2: continue
+            (name, address) = line.split(":")
+            if name == getUser():
+                return address.strip()
+        return None
+    
+    def getMailTitle():
+        return "Hudson Build: Your build #%s has done"%os.environ['BUILD_NUMBER']
+    
+    def getMailBody():
+        logFile = "/var/lib/hudson/jobs/CloudStack/builds/%s/log"%os.environ['BUILD_NUMBER']
+        fd = open(logFile, "r")
+        log = fd.read()
+        fd.close()
+        
+        bodies = []
+        
+        res = re.findall("Tarball URL:(.*)", log)
+        if len(res) != 0:
+            bodies.append("Tarball on internal server:")
+            bodies.append(res[0])
+            bodies.append(" ")
+        
+        res = re.findall("Public URL of the object is:(.*)", log)
+        if len(res) != 0:
+            bodies.append("Tarball on S3:")
+            url = res[0].replace(".s3.amazonaws.com", "")
+            bodies.append(url)
+            bodies.append(" ")
+        
+        bodies.append("Your build parameters:")
+        bodies.append("BUILDABLE_TARGET:\t%s"%os.environ['BUILDABLE_TARGET'])
+        bodies.append("LABEL_AS_PRERELEASE:\t%s"%os.environ['LABEL_AS_PRERELEASE'])
+        bodies.append("DO_DISTRO_PACKAGES:\t%s"%os.environ['DO_DISTRO_PACKAGES'])
+        bodies.append("PUSH_TO_REPO:\t%s"%os.environ['PUSH_TO_REPO'])
+        bodies.append("PACKAGE_VERSION:\t%s"%os.environ['PACKAGE_VERSION'])
+        bodies.append("BUILD_TARBALL:\t%s"%os.environ['BUILD_TARBALL'])
+        bodies.append("BUILD_USER:\t%s"%os.environ['BUILD_USER'])
+        bodies.append("BUILD_NUMBER:\t%s"%os.environ['BUILD_NUMBER'])
+        bodies.append("PUSH_TO_S3:\t%s"%os.environ['PUSH_TO_S3'])
+        
+        return "\n".join(bodies)
+    
+    try:
+        address = getMailAddress()
+        if address != None:
+            cmd = ['echo', '"%s"'%getMailBody(), "|", "mail", "-r hudson@cloud.com", "-s", '"%s"'%getMailTitle(), address]
+            bash(cmd)
+        else:
+            printd("Cannot find mail address for %s"%getUser())
+    except Exception, e:
+        printd("Send mail failed")
+        printd(FormatErrMsg(e))
+  
 def main():
     def cleanup(processes, signal, stackframe):
         for p in processes:
@@ -206,6 +274,7 @@ def main():
     
     waitForAllThreadsStart(processNum)
     waitForAllThreadsEnd()
+    sendMail()
         
 if __name__ == '__main__':
     try:

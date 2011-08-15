@@ -4,6 +4,7 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 import os, sys, traceback
 from os.path import *
 import threading, time
+import re
 
 def printd(msg, distro=None):
     if distro:
