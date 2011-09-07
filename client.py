@@ -120,7 +120,7 @@ def buildTarball():
     if os.environ['LABEL_AS_PRERELEASE'] == 'true':
         version = "%s.%s"%(version, os.environ['BUILD_NUMBER'])
     else:
-        version = "%s-1"%version
+        version = "%s-%s"%(version, os.environ['RELEASE_NUMBER'])
         
     if isDeb():
         if os.environ["BUILD_TARBALL"] == "oss&premium":

@@ -92,6 +92,7 @@ def prepareEnv(distro):
     environ['APTREPO_RELEASE_DIR']=APT_RELEASE_DIR
     environ['IS_DEB'] = isDeb()
     environ['SUB_DIR'] = buildMachines[distro]['subDir']
+    environ['RELEASE_NUMBER'] = os.environ['RELEASE_NUMBER']
     
     
     
