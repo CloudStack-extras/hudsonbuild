@@ -93,8 +93,11 @@ def prepareEnv(distro):
     environ['IS_DEB'] = isDeb()
     environ['SUB_DIR'] = buildMachines[distro]['subDir']
     environ['RELEASE_NUMBER'] = os.environ['RELEASE_NUMBER']
-    
-    
+
+    if compareVersion(environ['PACKAGE_VERSION'], '2.2.11') > 0:
+        environ['NO_PROPIRETARY'] = 'true'
+    else:
+        environ['NO_PROPIRETARY'] = 'false'
     
     fd = open(ENV_CFG_FILE_ON_HUDSON, "w")
     for k in environ:

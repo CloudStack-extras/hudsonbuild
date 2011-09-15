@@ -23,20 +23,22 @@ else
   #git clone https://github.com/CloudDotCom/CloudStack.git "$$GIT_SOURCE_DIR"
 fi
 
-pushd $GIT_SOURCE_DIR
-  if [ -d cloudstack-proprietary ] ; then
-   pushd cloudstack-proprietary
-    git fetch --all -t
-    git pull --tags || true
-    git reset --hard
-    git clean -fxd
-    if git rev-parse origin/$BUILDABLE_TARGET ; then premiumcommitid=`git checkout origin/$BUILDABLE_TARGET &>commit.log;cat commit.log; rm -f commit.log`
-    else premiumcommitid=`git checkout $BUILDABLE_TARGET &>commit.log;cat commit.log; rm -f commit.log` ; fi
-   popd
-  else
-    git clone ssh://hudson@git.lab.vmops.com/var/lib/git/cloudstack-proprietary
-  fi
-popd
+if [ x"$NO_PROPIRETARY" != x"true" ]; then
+    pushd $GIT_SOURCE_DIR
+    if [ -d cloudstack-proprietary ] ; then
+        pushd cloudstack-proprietary
+        git fetch --all -t
+        git pull --tags || true
+        git reset --hard
+        git clean -fxd
+        if git rev-parse origin/$BUILDABLE_TARGET ; then premiumcommitid=`git checkout origin/$BUILDABLE_TARGET &>commit.log;cat commit.log; rm -f commit.log`
+        else premiumcommitid=`git checkout $BUILDABLE_TARGET &>commit.log;cat commit.log; rm -f commit.log` ; fi
+        popd
+    else
+        git clone ssh://hudson@git.lab.vmops.com/var/lib/git/cloudstack-proprietary
+    fi
+    popd
+fi
 
 # END CODE CHECKOUT
 
