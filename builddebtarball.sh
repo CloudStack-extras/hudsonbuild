@@ -19,7 +19,7 @@ tarname=$pkgname.tar.gz
 debDir=`cat $RESULT_DIR`
 mkdir -p "$tmpdir"
 rsync -a "$debDir"/oss "$destdir"/
-if [ "$oss" != "True" ]; then
+if [ "$oss" != "True" && x"$NO_PROPIRETARY" != x"true" ]; then
     rsync -a "$debDir"/premium "$destdir"/
 fi
 cd "$destdir"

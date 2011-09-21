@@ -79,10 +79,15 @@ def buildSource():
         premiumrpms = []
         for root, dirs, files in os.walk(abspath(resDir)):
             for f in files:
-                if f.endswith(ext) and not isPremium(f):
-                    ossrpms.append(join(root, f))
-                elif f.endswith(ext) and isPremium(f):
-                    premiumrpms.append(join(root, f))
+                # since 2.2.12 cloudstack is full opensource, put all packages to oss dir
+                if os.environ['NO_PROPIRETARY'] == 'false':
+                    if f.endswith(ext) and not isPremium(f):
+                        ossrpms.append(join(root, f))
+                    elif f.endswith(ext) and isPremium(f):
+                        premiumrpms.append(join(root, f))
+                else:
+                    if f.endswith(ext):
+                        ossrpms.append(join(root, f))
         
         ossDir = join(resDir, 'oss')
         if not isdir(ossDir): os.makedirs(ossDir)

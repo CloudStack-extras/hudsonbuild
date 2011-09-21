@@ -22,7 +22,7 @@ rpmDir=`cat $RESULT_DIR`
 
 mkdir -p "$tmpdir"
 rsync -a "$rpmDir"/oss "$destdir"/
-if [ "$oss" != "True" ]; then
+if [ "$oss" != "True" && x"$NO_PROPIRETARY" != x"true" ]; then
 	rsync -a "$rpmDir"/premium "$destdir"/
 fi
 rsync -a "$DEPS_DIR" "$destdir"/
