@@ -14,7 +14,12 @@ tarballname="$1"
 shift
 s3repo="$1"
 
-pkgname=$tarballname-$version-$distro
+if [ x"$PACKAGE_NAME" != "x" ]; then
+	pkgname=$tarballname-$version-$PACKAGE_NAME-$distro
+else
+	pkgname=$tarballname-$version-$distro
+fi
+
 tmpdir=`mktemp -d`
 destdir=$tmpdir/$pkgname
 tarname=$pkgname.tar.gz

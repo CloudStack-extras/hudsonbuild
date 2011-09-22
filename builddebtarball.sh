@@ -12,7 +12,11 @@ version="$1"
 shift
 tarballname="$1"
 
-pkgname=$tarballname-$version-$distro
+if [ x"$PACKAGE_NAME" != "x" ]; then
+	pkgname=$tarballname-$version-$PACKAGE_NAME-$distro
+else
+	pkgname=$tarballname-$version-$distro
+fi
 tmpdir=`mktemp -d`
 destdir=$tmpdir/$pkgname
 tarname=$pkgname.tar.gz
@@ -22,6 +26,7 @@ rsync -a "$debDir"/oss "$destdir"/
 if [ "$oss" != "True" && x"$NO_PROPIRETARY" != x"true" ]; then
     rsync -a "$debDir"/premium "$destdir"/
 fi
+rsync -a "$DEPS_DIR" "$destdir"/
 cd "$destdir"
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 cd -

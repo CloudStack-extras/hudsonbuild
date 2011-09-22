@@ -93,6 +93,10 @@ def prepareEnv(distro):
     environ['IS_DEB'] = isDeb()
     environ['SUB_DIR'] = buildMachines[distro]['subDir']
     environ['RELEASE_NUMBER'] = os.environ['RELEASE_NUMBER']
+    if os.environ.has_key('PACKAGE_NAME'):
+        environ['PACKAGE_NAME'] = os.environ['PACKAGE_NAME']
+    else:
+        environ['PACKAGE_NAME'] = ""
 
     if compareVersion(environ['PACKAGE_VERSION'], '2.2.11') > 0:
         environ['NO_PROPIRETARY'] = 'true'
