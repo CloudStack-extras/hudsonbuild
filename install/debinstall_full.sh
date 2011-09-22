@@ -93,7 +93,7 @@ elif [ "$installtype" == "m" -o "$installtype" == "M" ] ; then
 elif [ "$installtype" == "a" -o "$installtype" == "A" ] ; then
 
     echo "Installing the Agent..." >&2
-    if doinstall cloud-agent ; then
+    if doinstall cloud-agent cloud-system-iso ; then
         echo "Agent installation is completed, please add the host from management server" >&2
     else
         true
