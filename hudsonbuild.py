@@ -10,7 +10,8 @@ buildMachines = {
   "rhel5": {"host":"build-rhel5", "isDeb":False, "subDir":"rhel/5"},
   "fedora14": {"host":"build-fc14", "isDeb":False, "subDir":"fedora/14"},
   "fedora13": {"host":"build-fc13", "isDeb":False, "subDir":"fedora/13"},
-  "rhel6": {"host":"build-rhel6", "isDeb":False, "subDir":"rhel/6"},
+  "rhel6.0": {"host":"build-rhel6", "isDeb":False, "subDir":"rhel/6.0"},
+  "rhel6.1": {"host":"build-rhel6", "isDeb":False, "subDir":"rhel/6.1"},
   "ubuntu10.10": {"host":"build-ubuntu1010", "isDeb":True, "subDir":"ubuntu/10.10"},
   "ubuntu10.04" : {"host":"build-ubuntu1004", "isDeb":True, "subDir":"ubuntu/10.04"},
   #"ubuntu11" : {"host":"natty", "isDeb":True,"subDir":"ubuntu/11" },
@@ -83,7 +84,12 @@ def prepareEnv(distro):
     environ['RESULT_DIR']='result'
     environ['RPM_RESULT_DIR']='rpms'
     environ['DEB_RESULT_DIR']='debs'
-    environ['DEPS_DIR']=DEPS_DIR
+    if distro == "rhel6.0":
+        environ['DEPS_DIR']='/root/deps/6.0'
+    elif distro == "rhel6.1":
+        environ['DEPS_DIR']='/root/deps/6.1'
+    else:
+        environ['DEPS_DIR']=DEPS_DIR
     environ['YUMREPO']=YUM_REPO
     environ['YUMREPO_RPM_DIR']=YUM_RPM_DIR
     environ['YUMREPO_RELEASE_DIR']=YUM_RELEASE_DIR
