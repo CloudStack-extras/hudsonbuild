@@ -130,15 +130,12 @@ def buildTarball():
     if isDeb():
         if os.environ["BUILD_TARBALL"] == "oss&premium":
             bash(["bash", abspath("builddebtarball.sh"), "True", distro, version, "CloudStack-oss"])
-            #bash(["sh", abspath("builddebtarball.sh"), "False", distro, version])
-            printd("Debian build doesn't support premium tarball")
         elif os.environ["BUILD_TARBALL"] == "oss":
             bash(["bash", abspath("builddebtarball.sh"), "True", distro, version, "CloudStack-oss"])
         elif os.environ['BUILD_TARBALL'] == "mycloud-agent":
             bash(["bash", abspath("builddebtarball.sh"), "True", distro, version, "MyCloud"])
         elif os.environ["BUILD_TARBALL"] == "premium":
-            #bash(["sh", abspath("builddebtarball.sh"), "False", distro, version])
-            printd("Debian build doesn't support premium tarball")
+            bash(["bash", abspath("builddebtarball.sh"), "True", distro, version, "CloudStack-oss"])
         else:
             print("No need to build tarball")    
     else:
