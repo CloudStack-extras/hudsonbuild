@@ -113,7 +113,7 @@ def buildTarball():
             printd("No need to push to S3")
             return ""
         
-        if distro != "rhel5" and distro != "rhel6":
+        if distro != "rhel5" and distro != "rhel6.0" and distro != "rhel6.1":
             printd("Only rhel5 and rhel6 build support this feature")
             return ""
         

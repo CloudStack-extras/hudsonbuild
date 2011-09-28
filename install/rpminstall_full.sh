@@ -28,7 +28,7 @@ function doinstall() {
 }
     
 function doupdate() {
-    yum update --enablerepo='cloud-temp' cloud-* || return $?
+    yum update --enablerepo='cloud-temp' 'cloud-*' || return $?
 }
     
 function doremove() {
