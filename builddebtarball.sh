@@ -20,13 +20,9 @@ fi
 tmpdir=`mktemp -d`
 destdir=$tmpdir/$pkgname
 tarname=$pkgname.tar.gz
-debDir=`cat $RESULT_DIR`
+debDir='source/artifacts/debbuild'
 mkdir -p "$tmpdir"
-rsync -a "$debDir"/oss "$destdir"/
-if [ "$oss" != "True" && x"$NO_PROPIRETARY" != x"true" ]; then
-    rsync -a "$debDir"/premium "$destdir"/
-fi
-rsync -a "$DEPS_DIR" "$destdir"/
+rsync -a ./*.deb "$destdir"/
 cd "$destdir"
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 cd -
@@ -37,14 +33,4 @@ tar czf "$tarname" "$pkgname"
 cd -
 mv "$tmpdir"/"$tarname" .
 rm -rf "$tmpdir"
-
-tgtfldr="$APTREPO":"$APTREPO_RELEASE_DIR"/"$SUB_DIR"
-mntpoint="/media"
-mount "$tgtfldr" "$mntpoint" -o nolock
-mkdir -p "$mntpoint"/"$PUSH_TO_REPO"
-mv "$tarname" "$mntpoint"/"$PUSH_TO_REPO"/
-echo "Tarball URL:http://aptrepo.lab.vmops.com/releases/$SUB_DIR/$PUSH_TO_REPO/$tarname"
-umount "$mntpoint"
-
-
-
+rm -rf ./*.deb

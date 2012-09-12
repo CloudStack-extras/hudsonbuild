@@ -8,6 +8,8 @@ params="$@"
 # Build rpms
 pushd "$GIT_SOURCE_DIR"
 if [ "$USE_WAF" == "True" ]; then
+   mvn build-helper:remove-project-artifact
+   mvn install  -P deps
    ./waf rpm $params
    rpms="artifacts/rpmbuild/RPMS"
 else

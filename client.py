@@ -100,10 +100,10 @@ def buildSource():
     
     if isDeb():
         buildDeb()
-        arrageResult(".deb")
+        #arrageResult(".deb")
     else:
         buildRpm()
-        arrageResult(".rpm")
+        #arrageResult(".rpm")
         
         
 def buildTarball():
