@@ -1,3 +1,4 @@
+#!/bin/bash
 # Checkout $GIT_SOURCE_DIR from git
 
 . `dirname $0`/commons.sh
@@ -19,7 +20,7 @@ if [ -d $GIT_SOURCE_DIR ] ; then
     else osscommitid=`git checkout $BUILDABLE_TARGET &>commit.log;cat commit.log; rm -f commit.log` ; fi
   	popd
 else
-  git clone ssh://hudson@git.cloud.com/var/lib/git/cloudstack-oss $GIT_SOURCE_DIR
+  git clone https://git-wip-us.apache.org/repos/asf/incubator-cloudstack.git $GIT_SOURCE_DIR
   #git clone https://github.com/CloudDotCom/CloudStack.git "$$GIT_SOURCE_DIR"
 fi
 

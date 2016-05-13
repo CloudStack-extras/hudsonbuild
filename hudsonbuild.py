@@ -11,9 +11,9 @@ buildMachines = {
   "fedora14": {"host":"build-fc14", "isDeb":False, "subDir":"fedora/14"},
   "fedora13": {"host":"build-fc13", "isDeb":False, "subDir":"fedora/13"},
   "rhel6.0": {"host":"build-rhel6", "isDeb":False, "subDir":"rhel/6.0"},
-  "rhel6.1": {"host":"build-rhel6", "isDeb":False, "subDir":"rhel/6.1"},
+  "rhel6.3": {"host":"rhel63", "isDeb":False, "subDir":"rhel/6.3"},
   "ubuntu10.10": {"host":"build-ubuntu1010", "isDeb":True, "subDir":"ubuntu/10.10"},
-  "ubuntu10.04" : {"host":"build-ubuntu1004", "isDeb":True, "subDir":"ubuntu/10.04"},
+  "ubuntu12.04" : {"host":"ubuntu1204", "isDeb":True, "subDir":"ubuntu/10.04"},
   #"ubuntu11" : {"host":"natty", "isDeb":True,"subDir":"ubuntu/11" },
 }
 
@@ -288,8 +288,15 @@ def main():
     
     waitForAllThreadsStart(processNum)
     waitForAllThreadsEnd()
-    sendMail()
+    #sendMail()
+    grabartifacts()
         
+def grabartifacts():
+    distro=os.environ['DO_DISTRO_PACKAGES']
+    host = buildMachines[distro]['host']
+    remoteHost = '%s@%s'%(REMOTE_USER, host)
+    bash(['scp', '%s:%s/*.tar.gz'%(remoteHost, BUILD_DIR), "$WORKSPACE/"])
+    bash(['ssh', remoteHost, '"rm -rf %s/*.tar.gz"'%BUILD_DIR])
 if __name__ == '__main__':
     try:
         main()

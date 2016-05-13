@@ -9,7 +9,9 @@ params="$@"
 # Build debs
 cd "$GIT_SOURCE_DIR"
 if [ "$USE_WAF" == "True" ]; then
-    ./waf deb $params
+    mvn build-helper:remove-project-artifact
+    mvn install  -P deps
+    dpkg-buildpackage
     debs="artifacts/debbuild/"
 else
     true
